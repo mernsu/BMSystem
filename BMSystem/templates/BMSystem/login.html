@@ -1,0 +1,47 @@
+<!-- login.html -->
+{% extends 'BMSystem/base.html' %}
+
+{% load static %}
+
+{% block title %}登录{% endblock %}
+
+{% block content %}
+    <div class="login-container">
+        <h2>登录</h2>
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">登录</button>
+            <div class="remember-me">
+                <label for="id_remember_me">{{ form.remember_me.label }}</label>
+                {{ form.remember_me }}
+            </div>
+        </form>
+        {% if form.errors %}
+            <p>用户名或密码错误。</p>
+        {% endif %}
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block extra_css %}
+    <style>
+        .login-container {
+            max-width: 300px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .remember-me {
+            margin-top: 10px;
+        }
+    </style>
+{% endblock %}

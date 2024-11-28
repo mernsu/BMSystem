@@ -1,0 +1,33 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm Delete Book</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Confirm Delete Book</h1>
+    </header>
+
+    <section>
+        <p>Are you sure you want to delete the book "{{ object.title }}"?</p>
+        <p>This action cannot be undone and all related information will be lost.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <input type="submit" value="Confirm">
+            <a href="{% url 'book_list' %}">Cancel</a>
+        </form>
+    </section>
+</div>
+
+<footer>
+    <p>&copy; 2024 BMSystem</p>
+</footer>
+</body>
+</html>

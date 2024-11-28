@@ -1,0 +1,62 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}图书管理系统{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+    <style>
+        .navbar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 200px;
+            height: 100%;
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-color: #555;
+        }
+
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <a href="{% url 'home' %}">首页</a>
+    <a href="{% url 'book_list' %}">图书列表</a>
+    <a href="{% url 'book_add' %}">图书入库</a>
+    <a href="{% url 'book_delete' %}">图书出库</a>
+    <a href="{% url 'book_update' %}">图书更新</a>
+    <!-- 更多链接可以在这里添加 -->
+</div>
+
+<div class="content">
+    {% block content %}
+        <!-- 其他内容将在这里插入 -->
+    {% endblock %}
+</div>
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>

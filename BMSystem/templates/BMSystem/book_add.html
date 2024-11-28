@@ -1,0 +1,12 @@
+{% extends 'BMSystem/base.html' %}
+
+{% block title %}图书入库{% endblock %}
+
+{% block content %}
+    <h2>图书入库</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">入库</button>
+    </form>
+{% endblock %}

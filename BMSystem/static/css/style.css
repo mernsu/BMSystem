@@ -1,0 +1,98 @@
+/* 基础样式 */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* 使 body 占满整个视口高度 */
+    background-image: linear-gradient(to right, #f4f4f4, #e0e0e0); /* 添加渐变背景 */
+}
+
+/* 删除页面内容样式 */
+.delete-container {
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25); /* 增加阴影深度 */
+    border-radius: 8px;
+    max-width: 400px;
+    width: 100%;
+    margin: 20px auto;
+    text-align: center; /* 使文本居中 */
+    animation: fadeIn 1s ease-in-out; /* 添加淡入动画 */
+}
+
+.delete-container h1 {
+    margin-bottom: 20px;
+    color: #3498db; /* 标题颜色 */
+    font-weight: 600; /* 加粗标题 */
+}
+
+.delete-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* 增加元素间距 */
+}
+
+.delete-container input[type="text"] {
+    padding: 12px 20px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* 添加过渡效果 */
+}
+
+.delete-container input[type="text"]:focus {
+    border-color: #3498db; /* 输入框聚焦时的颜色 */
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.5); /* 输入框聚焦时的阴影 */
+}
+
+.delete-container button {
+    padding: 12px 20px;
+    font-size: 16px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* 添加按压效果 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 添加按钮阴影 */
+}
+
+.delete-container button:hover {
+    background-color: #2980b9;
+}
+
+.delete-container button:active {
+    transform: translateY(2px); /* 按压时的位移效果 */
+}
+
+/* 页脚样式 */
+footer {
+    margin-top: 30px; /* 增加页脚与内容的距离 */
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    color: white;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+/* 动画 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
