@@ -1,20 +1,43 @@
+<!-- BMSystem/templates/BMSystem/borrow_book.html -->
 
 {% extends 'BMSystem/base1.html' %}
 
-{% block title %}借阅书籍 - 图书馆管理系统{% endblock %}
+{% block title %}借阅图书 - 图书馆管理系统{% endblock %}
 
 {% block content %}
     <div class="container">
-        <h2>借阅书籍</h2>
-        <form method="post">
+        <h2>借阅图书</h2>
+        <form id="borrowForm" method="post" action="{% url 'borrow_book' %}">
             {% csrf_token %}
-            {{ form.as_p }}
+            <div class="form-group">
+                <label for="isbn">输入书籍 ISBN:</label>
+                <input type="text" class="form-control" id="isbn" name="isbn" required>
+            </div>
+            <div class="form-group">
+                <label for="due_date">预计归还日期:</label>
+                <input type="date" class="form-control" id="due_date" name="due_date">
+            </div>
             <button type="submit" class="btn btn-primary">借阅</button>
         </form>
-        {% if success %}
-            <script>
-                alert('您已成功借阅书籍。');
-            </script>
-        {% endif %}
+        <div id="message"></div>
     </div>
+    <script>
+        document.getElementById('borrowForm').onsubmit = function(e) {
+            e.preventDefault(); // 阻止表单默认提交行为
+            var formData = new FormData(this);
+            fetch("{% url 'borrow_book' %}", {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.status === 'success') {
+                        alert(data.message); // 显示成功消息
+                    } else {
+                        alert(data.error); // 显示错误消息
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        };
+    </script>
 {% endblock %}

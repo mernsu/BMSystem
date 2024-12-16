@@ -7,15 +7,33 @@
 {% block content %}
     <div class="container">
         <h2>归还书籍</h2>
-        <form method="post">
+        <form id="returnForm" method="post" action="{% url 'return_book' %}">
             {% csrf_token %}
-            {{ form.as_p }}
+            <div class="form-group">
+                <label for="isbn">ISBN号:</label>
+                <input type="text" class="form-control" id="isbn" name="isbn" required>
+            </div>
             <button type="submit" class="btn btn-primary">归还</button>
         </form>
-        {% if success_message %}
-            <script>
-                alert('{{ success_message }}');
-            </script>
-        {% endif %}
+        <div id="message"></div>
     </div>
+    <script>
+        document.getElementById('returnForm').onsubmit = function(e) {
+            e.preventDefault(); // 阻止表单默认提交行为
+            var formData = new FormData(this);
+            fetch("{% url 'return_book' %}", {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.status === 'success') {
+                        alert(data.message); // 显示成功消息
+                    } else {
+                        alert(data.error); // 显示错误消息
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        };
+    </script>
 {% endblock %}

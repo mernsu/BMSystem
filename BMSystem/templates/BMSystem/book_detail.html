@@ -1,0 +1,23 @@
+<!-- BMSystem/templates/BMSystem/book_detail.html -->
+
+{% extends 'BMSystem/base.html' %}
+
+{% block title %}{{ book.title }} - 书籍详情{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>书籍详情</h2>
+        <div class="book-detail">
+            <h3>{{ book.title }}</h3>
+            <p><strong>作者：</strong>{{ book.author }}</p>
+            <p><strong>ISBN：</strong>{{ book.isbn }}</p>
+            <p><strong>出版社：</strong>{{ book.publisher }}</p>
+            <p><strong>出版日期：</strong>{{ book.published_date }}</p>
+            <p><strong>库存数量：</strong>{{ book.stock }}</p>
+            <p><strong>借阅次数：</strong>{{ book.borrow_count }}</p>
+            {% if book.description %}
+                <p><strong>描述：</strong>{{ book.description }}</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

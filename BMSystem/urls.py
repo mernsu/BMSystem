@@ -7,7 +7,7 @@ from .views import (
     BookList,
     BookDelete, BookUpdate,
     Record, user_login, admin_login, user_register, combined_login, admin_register, logout_view, UserHome,
-    user_profile,borrow_book,return_book
+    user_profile,borrow_book,return_book,book_detail
 )
 
 urlpatterns = [
@@ -19,6 +19,7 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
     path('admin/home/', AdminHome, name='admin_home'),
     path('admin/book_list/', BookList, name='book_list'),
+    path('book/<int:pk>/', book_detail, name='book_detail'),
     path('admin/book_add/', BookAdd, name='book_add'),
     path('admin/book_delete/',BookDelete,name='book_delete'),
     path('admin/book_update',BookUpdate,name='book_update'),

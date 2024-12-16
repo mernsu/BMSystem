@@ -1,72 +1,25 @@
+<!-- BMSystem/templates/BMSystem/book_list.html -->
+
 {% extends 'BMSystem/base.html' %}
+
+{% block title %}图书列表 - 图书馆管理系统{% endblock %}
+
 {% block content %}
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>图书列表</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-                background-color: #f4f4f4;
-            }
-            .container {
-                width: 100%; /* 增加容器的宽度 */
-                margin: 20px auto;
-                background-color: #fff;
-                padding: 20px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            }
-            .book-list {
-                min-width: 800px; /* 最小宽度 */
-                max-width: 1000px; /* 最大宽度 */
-                width: 80%; /* 仍然占据全部可用空间 */
-                border-collapse: collapse;
-                margin: 0 auto; /* 水平居中显示 */
-            }
-            .book-list th,
-            .book-list td {
-                border: 1px solid #ddd;
-                padding: 8px;
-                text-align: left;
-            }
-            .book-list th {
-                background-color: #f2f2f2;
-            }
-            .book-list tr:nth-child(even) {
-                background-color: #f9f9f9;
-            }
-            .book-list tr:hover {
-                background-color: #f1f1f1;
-            }
-        </style>
-    </head>
-    <body>
     <div class="container">
-        <h1>图书列表</h1>
-        <table class="book-list">
-            <thead>
-            <tr>
-                <th>书名</th>
-                <th>作者</th>
-                <th>出版年份</th>
-                <th>ISBN</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for book in book_list %}
-                <tr>
-                    <td>{{ book.title }}</td>
-                    <td>{{ book.author }}</td>
-                    <td>{{ book.published_year }}</td>
-                    <td>{{ book.isbn }}</td>
-                </tr>
+        <h2>图书列表</h2>
+        <ul>
+            {% for book in books %}
+                <li>
+                    <strong>{{ book.title }}</strong> - {{ book.author }}
+                    <br><small>ISBN: {{ book.isbn }}</small>
+                    <br><small>出版社: {{ book.publisher }}</small>
+                    <br><small>出版日期: {{ book.published_date }}</small>
+                    <br><small>库存: {{ book.stock }}</small>
+                    <small><a href="{% url 'book_detail' pk=book.id %}">更多信息</a></small>
+                </li>
+            {% empty %}
+                <li>暂无图书信息。</li>
             {% endfor %}
-            </tbody>
-        </table>
+        </ul>
     </div>
-    </body>
-    </html>
 {% endblock %}

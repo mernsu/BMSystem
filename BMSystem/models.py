@@ -1,5 +1,6 @@
 # models.py
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -29,8 +30,10 @@ class Book(models.Model):
 
 
 class BorrowRecord(models.Model):
-    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='borrow_records')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='borrow_records')
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     borrow_date = models.DateField(auto_now_add=True)
+    due_date = models.DateField(null=True, blank=True)  # 预计归还日期
     return_date = models.DateField(null=True, blank=True)
+
 

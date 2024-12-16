@@ -9,7 +9,7 @@ from .forms import CustomUserRegistrationForm,UserLoginForm,BorrowBookForm,Retur
 from django.contrib.auth import authenticate,login,logout
 from django.db.models import Count
 from django.utils import timezone
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 
 
 def combined_login(request):
@@ -77,7 +77,7 @@ def logout_view(request):
 
 def UserHome(request):
     # 获取每本书的借阅次数
-    popular_books = Book.objects.annotate(num_bookings=Count('borrow_records')).order_by('-num_bookings')[:5]
+    popular_books = Book.objects.annotate(num_bookings=Count('borrow_count')).order_by('-num_bookings')[:5]
 
     # 获取当前用户的借阅记录
     borrow_records = BorrowRecord.objects.filter(user=request.user)
@@ -95,60 +95,69 @@ def user_profile(request):
     profile = request.user.profile
     return render(request, 'BMSystem/user_profile.html', {'profile': profile})
 
-@login_required
+
+
+@login_required(login_url='user_login')
 def borrow_book(request):
     if request.method == 'POST':
         form = BorrowBookForm(request.POST)
         if form.is_valid():
-            isbn = form.cleaned_data['isbn']
-            borrow_date = form.cleaned_data.get('borrow_date', date.today())
-            return_date = form.cleaned_data.get('return_date')
-            user = request.user
+            isbn = form.cleaned_data['isbn'].strip()  # 去除ISBN前后的空格
+            try:
+                book = Book.objects.get(isbn=isbn)
+            except Book.DoesNotExist:
+                return JsonResponse({'status': 'error', 'error': '借阅失败！ISBN为“' + isbn + '”的书籍不存在'}, status=404)
 
-            book = Book.objects.filter(isbn=isbn).first()
-            if book and book.stock > 0:
-                BorrowRecord.objects.create(
+            if book.stock > 0:
+                due_date = form.cleaned_data.get('due_date', timezone.now().date())  # 如果未提供预计归还日期，则默认为当前日期
+                borrow_record = BorrowRecord.objects.create(
                     book=book,
                     user=request.user,
-                    borrow_date=borrow_date,
-                    return_date=return_date
+                    borrow_date=timezone.now().date(),
+                    due_date=due_date
                 )
                 book.stock -= 1
                 book.save()
-                return render(request, 'BMSystem/borrow_book.html', {'form': form, 'success': True})
+                return JsonResponse({'status': 'success', 'message': '借阅成功！'})
             else:
-                form.add_error('isbn', '书籍不存在或已全部借出')
+                return JsonResponse({'status': 'error', 'error': '借阅失败！该书已无库存。'}, status=400)
+        else:
+            return JsonResponse({'status': 'error', 'error': '请输入有效的ISBN号。'}, status=400)
     else:
         form = BorrowBookForm()
+        return render(request, 'BMSystem/borrow_book.html', {'form': form})
 
-    return render(request, 'BMSystem/borrow_book.html', {'form': form})
-
-from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse
-from .models import Book, BorrowRecord
-from django.utils import timezone
-from django.contrib.auth.decorators import login_required
-
-
-
-@login_required
+@login_required(login_url='user_login')
 def return_book(request):
     if request.method == 'POST':
-        isbn = request.POST.get('isbn')
-        book = get_object_or_404(Book, isbn=isbn)
-        borrow_record = BorrowRecord.objects.filter(book=book, user=request.user, return_date__isnull=True).first()
-        if borrow_record:
-            # 执行归还逻辑
-            borrow_record.return_date = timezone.now().date()
-            borrow_record.save()
-            book.stock += 1
-            book.save()
-            return JsonResponse({'message': 'Book returned successfully!'})
+        form = ReturnBookForm(request.POST)
+        if form.is_valid():
+            isbn = form.cleaned_data['isbn']
+
+            try:
+                book = Book.objects.get(isbn=isbn)
+            except Book.DoesNotExist:
+                # 如果书籍不存在，返回错误消息
+                return JsonResponse({'status': 'error', 'error': '请输入有效的ISBN号。'}, status=400)
+
+            borrow_record = BorrowRecord.objects.filter(book=book, user=request.user, return_date__isnull=True).first()
+
+            if borrow_record:
+                borrow_record.return_date = timezone.now().date()
+                borrow_record.save()
+
+                book.stock += 1
+                book.save()
+
+                return JsonResponse({'status': 'success', 'message': '图书已成功归还。'})
+            else:
+                return JsonResponse({'status': 'error', 'error': '您没有借阅这本书或已归还。'})
         else:
-            return JsonResponse({'error': 'This book was not borrowed or has already been returned.'}, status=400)
+            # 表单验证失败，返回错误消息
+            return JsonResponse({'status': 'error', 'error': '请输入有效的ISBN号。'}, status=400)
     else:
-        # 如果不是 POST 请求，显示归还表单
-        return render(request, 'BMSystem/return_book.html')
+        form = ReturnBookForm()
+        return render(request, 'BMSystem/return_book.html', {'form': form})
 
 #------------------------------------------------------------------------------------------------------------------!>
 
@@ -159,7 +168,7 @@ def return_book(request):
 
 @login_required(login_url='admin_login')
 def AdminHome(request):
-    popular_books = Book.objects.annotate(num_bookings=Count('borrow_records')).order_by('-num_bookings')[:5]
+    popular_books = Book.objects.annotate(num_bookings=Count('borrow_count')).order_by('-num_bookings')[:5]
 
     # 每个月的借阅数据
     current_year = timezone.now().year
@@ -190,7 +199,12 @@ def AdminHome(request):
 @login_required(login_url='admin_login')
 def BookList(request):
     books = Book.objects.all()  # 获取所有书籍
-    return render(request, 'BMSystem/book_list.html', {'book_list': books})
+    return render(request, 'BMSystem/book_list.html', {'books': books})
+
+@login_required(login_url='admin_login')
+def book_detail(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    return render(request, 'BMSystem/book_detail.html', {'book': book})
 
 @login_required(login_url='admin_login')
 def BookAdd(request):
@@ -243,10 +257,7 @@ def BookUpdate(request):
 
 @login_required(login_url='admin_login')
 def Record(request):
-    # 获取所有的借阅记录
     records = BorrowRecord.objects.select_related('book', 'user').all()
-
-    # 将借阅记录传递到模板
     return render(request, 'BMSystem/borrow_record.html', {'borrow_record': records})
 
 #图书管理端--------------------------------------------------------------------------------------------------------!>

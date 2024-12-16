@@ -9,6 +9,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.x/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/style1.css' %}">
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </head>
 <body>
@@ -18,11 +26,10 @@
             <h1>图书馆管理系统</h1>
             <ul class="nav-links">
                 <li><a href="{% url 'user_home' %}">首页</a></li>
-                <li><a href="{% url 'user_profile' %}">用户中心</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'return_book' %}">图书归还</a></li>
                     <li><a href="{% url 'borrow_book' %}">图书借阅</a></li>
-                    <li><a href="{% url 'user_home' %}">{{ user.username }}</a></li>
+                    <li><a href="{% url 'user_profile' %}">{{ user.username }}</a></li>
                     <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out-alt"></i> 退出</a></li>
                 {% else %}
                     <li><a href="{% url 'login' %}">登录</a></li>

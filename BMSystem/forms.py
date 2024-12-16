@@ -1,9 +1,13 @@
 from email.policy import default
 from django import forms
+from django.core.exceptions import ValidationError
+from django.utils import timezone
+
 from .models import Book,Profile
 from django.contrib.auth.forms import AuthenticationForm,User
 from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import RegexValidator
+import datetime
 
 class BookForm(forms.ModelForm):
     class Meta:
@@ -40,9 +44,17 @@ class BookUpdateForm(forms.ModelForm):
 
 class BorrowBookForm(forms.Form):
     isbn = forms.CharField(label='ISBN号', max_length=13)
-    # 添加借阅日期和归还日期字段（如果需要在表单中显示）
-    borrow_date = forms.DateField(label='借阅日期', required=False)
-    return_date = forms.DateField(label='归还日期', required=False)
+    due_date = forms.DateField(label='预计归还日期', required=False, widget=forms.DateInput(attrs={'type': 'date'}))
+
+    def clean(self):
+        cleaned_data = super().clean()
+        isbn = cleaned_data.get('isbn')
+        due_date = cleaned_data.get('due_date')
+
+        if due_date and due_date <= timezone.now().date():
+            raise forms.ValidationError("预计归还日期必须在当前日期之后。")
+
+        return cleaned_data
 
 class ReturnBookForm(forms.Form):
     isbn = forms.CharField(label='ISBN号', max_length=13)
