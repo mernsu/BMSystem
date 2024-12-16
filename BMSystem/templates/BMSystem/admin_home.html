@@ -1,0 +1,48 @@
+<!-- home.html -->
+{% extends 'BMSystem/base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1>图书馆首页</h1>
+        <div class="popular-books">
+            <h2>热门借阅书籍</h2>
+            <ul>
+                {% for book in popular_books %}
+                    <li>{{ book.title }} - 借阅次数：{{ book.num_bookings }}</li>
+                {% empty %}
+                    <li>没有数据</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="bar-chart">
+            <h2>每月借阅柱状图</h2>
+            <canvas id="bookingChart"></canvas>
+        </div>
+    </div>
+
+    <!-- 引入Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('bookingChart').getContext('2d');
+        const bookingChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {% for data in bar_chart_data %}"{{ data.month }}"{% if not forloop.last %},{% endif %}{% endfor %},
+            datasets: [{
+                label: '每月借阅次数',
+                data: {% for data in bar_chart_data %}{{ data.total }}{% if not forloop.last %},{% endif %}{% endfor %},
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+        });
+    </script>
+{% endblock %}

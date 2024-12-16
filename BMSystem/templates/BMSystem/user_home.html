@@ -1,0 +1,33 @@
+<!-- BMSystem/templates/BMSystem/user_home.html -->
+
+{% extends 'BMSystem/base1.html' %}
+
+{% block title %}用户中心 - 图书馆管理系统{% endblock %}
+
+{% block content %}
+    <div class="grid-container">
+        <div class="grid-item popular-books">
+            <h3>热门借阅书籍</h3>
+            <ul>
+                {% for book in popular_books %}
+                    <li>
+                        <strong>{{ book.title }}</strong> 由 {{ book.author }} 著
+                        <br>借阅次数：{{ book.num_bookings }}
+                    </li>
+                {% empty %}
+                    <li>暂无热门书籍数据。</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="grid-item borrow-history">
+            <h3>借阅历史</h3>
+            <ul>
+                {% for record in borrow_records %}
+                    <li>{{ record.book.title }} - 借阅日期：{{ record.borrow_date }}</li>
+                {% empty %}
+                    <li>您还没有借阅过任何书籍。</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

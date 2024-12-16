@@ -31,7 +31,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "polls.apps.PollsConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -108,6 +107,10 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = "zh-Hans"
 
 TIME_ZONE = "Asia/Shanghai"
+
+LOGIN_URL = "login"
+
+LOGOUT_REDIRECT_URL = 'login'
 
 USE_I18N = True
 

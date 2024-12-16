@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>登录</title>
+</head>
+<body>
+<h2>登录</h2>
+<p>选择登录类型:</p>
+<a href="{% url 'user_login' %}">用户登录</a> |
+<a href="{% url 'admin_login' %}">管理员登录</a> |
+<a href="{% url 'user_register' %}">用户注册</a> |
+<a href="{% url 'admin_register' %}">管理员注册</a>
+</body>
+</html>

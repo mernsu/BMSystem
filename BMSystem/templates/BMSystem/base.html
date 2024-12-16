@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,15 +38,36 @@
             margin-left: 250px;
             padding: 20px;
         }
+
+        .navbar .user-info {
+            margin-bottom: 20px;
+        }
+
+        .navbar .user-info a {
+            background-color: transparent;
+            padding-left: 0;
+        }
+
+        .navbar .user-info a:hover {
+            background-color: transparent;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
 <div class="navbar">
-    <a href="{% url 'home' %}">首页</a>
+    {% if user.is_authenticated %}
+        <div class="user-info">
+            欢迎, <strong>{{ user.username }}</strong> |
+            <a href="{% url 'logout' %}">登出</a>
+        </div>
+    {% endif %}
+    <a href="{% url 'admin_home' %}">首页</a>
     <a href="{% url 'book_list' %}">图书列表</a>
     <a href="{% url 'book_add' %}">图书入库</a>
     <a href="{% url 'book_delete' %}">图书出库</a>
     <a href="{% url 'book_update' %}">图书更新</a>
+    <a href="{% url 'borrow_record' %}">图书借阅情况</a>
     <!-- 更多链接可以在这里添加 -->
 </div>
 

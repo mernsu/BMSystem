@@ -1,0 +1,20 @@
+
+{% extends 'BMSystem/base1.html' %}
+
+{% block title %}借阅书籍 - 图书馆管理系统{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>借阅书籍</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">借阅</button>
+        </form>
+        {% if success %}
+            <script>
+                alert('您已成功借阅书籍。');
+            </script>
+        {% endif %}
+    </div>
+{% endblock %}

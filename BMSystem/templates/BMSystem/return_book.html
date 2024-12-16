@@ -1,0 +1,21 @@
+<!-- BMSystem/templates/BMSystem/return_book.html -->
+
+{% extends 'BMSystem/base1.html' %}
+
+{% block title %}归还书籍 - 图书馆管理系统{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>归还书籍</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">归还</button>
+        </form>
+        {% if success_message %}
+            <script>
+                alert('{{ success_message }}');
+            </script>
+        {% endif %}
+    </div>
+{% endblock %}

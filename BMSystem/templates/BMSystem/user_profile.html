@@ -1,0 +1,20 @@
+{% extends 'BMSystem/base1.html' %}
+
+{% block title %}个人资料 - 图书馆管理系统{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>个人资料</h2>
+        <div class="user-profile">
+            <p><strong>用户名:</strong> {{ profile.user.username }}</p>
+            <p><strong>姓名:</strong> {{ profile.name }}</p>
+            <p><strong>身份证号:</strong> {{ profile.identity_card }}</p>
+            <p><strong>邮箱:</strong> {{ profile.user.email }}</p>
+            {% if profile.is_admin %}
+                <p><strong>角色:</strong> 管理员</p>
+            {% else %}
+                <p><strong>角色:</strong> 普通用户</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

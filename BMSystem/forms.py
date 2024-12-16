@@ -1,6 +1,9 @@
+from email.policy import default
 from django import forms
-from .models import Book
-from django.contrib.auth.forms import AuthenticationForm
+from .models import Book,Profile
+from django.contrib.auth.forms import AuthenticationForm,User
+from django.contrib.auth.forms import UserCreationForm
+from django.core.validators import RegexValidator
 
 class BookForm(forms.ModelForm):
     class Meta:
@@ -14,23 +17,6 @@ class BookForm(forms.ModelForm):
             'stock':'数目',
             'isbn' : 'ISBN',
         }
-
-class CustomAuthForm(AuthenticationForm):
-    remember_me = forms.BooleanField(required=False, label="Remember me")
-
-    def __init__(self, *args, **kwargs):
-        super(CustomAuthForm, self).__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Username'})
-        self.fields['password'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Password'})
-
-    def clean(self):
-        cleaned_data = super(CustomAuthForm, self).clean()
-        remember_me = cleaned_data.get('remember_me')
-        if remember_me:
-            # 设置记住我的逻辑，例如设置一个长时间的session
-            pass
-        return cleaned_data
-    pass
 
 
 
@@ -50,3 +36,44 @@ class BookUpdateForm(forms.ModelForm):
             'isbn' : 'ISBN',
         }
 
+
+
+class BorrowBookForm(forms.Form):
+    isbn = forms.CharField(label='ISBN号', max_length=13)
+    # 添加借阅日期和归还日期字段（如果需要在表单中显示）
+    borrow_date = forms.DateField(label='借阅日期', required=False)
+    return_date = forms.DateField(label='归还日期', required=False)
+
+class ReturnBookForm(forms.Form):
+    isbn = forms.CharField(label='ISBN号', max_length=13)
+
+class UserLoginForm(AuthenticationForm):
+    username = forms.CharField(label='用户名', max_length=64)
+    password = forms.CharField(label='密码', widget=forms.PasswordInput)
+
+class AdminLoginForm(AuthenticationForm):
+    username = forms.CharField(label='用户名', max_length=64)
+    password = forms.CharField(label='密码', widget=forms.PasswordInput)
+
+class CustomUserRegistrationForm(UserCreationForm):
+    name = forms.CharField(label='姓名', max_length=100)
+    identity_card = forms.CharField(label='身份证号', max_length=18)
+    is_admin = forms.BooleanField(label='是否为管理员', required=False)
+
+    class Meta:
+        model = User
+        fields = ('username', 'password1', 'password2', 'email', 'name', 'identity_card')
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.first_name = self.cleaned_data['name']  # 设置用户的 first_name
+        if commit:
+            user.save()
+            # 创建 Profile 实例时包含 name 和 identity_card
+            Profile.objects.create(
+                user=user,
+                name=self.cleaned_data['name'],
+                identity_card=self.cleaned_data['identity_card'],
+                is_admin=self.cleaned_data['is_admin']
+            )
+        return user

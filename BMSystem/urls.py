@@ -1,34 +1,31 @@
 # urls.py
 
 from django.urls import path
+from django.contrib.auth.views import LogoutView
 from .views import (
-    BookDetailView,
-    BookCreateView,
-    BookUpdateView,
-    BookDeleteView,
-    UserLoginView,
-    UserLogoutView,
-    BorrowBookView,
-    ReturnBookView,
-    Home, BookSearchView, BookAdd,
+    AdminHome, BookAdd,
     BookList,
     BookDelete, BookUpdate,
-    UserLogin,
+    Record, user_login, admin_login, user_register, combined_login, admin_register, logout_view, UserHome,
+    user_profile,borrow_book,return_book
 )
 
 urlpatterns = [
-    path('login/',UserLogin,name='user_login'),
-    path('home/', Home, name='home'),
-    path('book_list/', BookList, name='book_list'),
-    path('book_search/', BookSearchView.as_view(), name='book_search'),
-    path('book_add/', BookAdd, name='book_add'),
-    path('book_delete/',BookDelete,name='book_delete'),
-    path('book_update',BookUpdate,name='book_update'),
-    path('book/<int:pk>/', BookDetailView.as_view(), name='book_detail'),
-    path('book/new/', BookCreateView.as_view(), name='book_new'),
-    path('book/<int:pk>/edit/', BookUpdateView.as_view(), name='book_edit'),
-    path('login/', UserLoginView.as_view(), name='login'),
-    path('logout/', UserLogoutView.as_view(), name='logout'),
-    path('borrow/', BorrowBookView.as_view(), name='borrow_book'),
-    path('return/', ReturnBookView.as_view(), name='return_book'),
+    path('login/', combined_login, name='combined_login'),
+    path('admin/register/',admin_register, name='admin_register'),
+    path('admin/login/',admin_login,name='admin_login'),
+    path('user/login/',user_login,name='user_login'),
+    path('user/register/', user_register, name='user_register'),
+    path('logout/', logout_view, name='logout'),
+    path('admin/home/', AdminHome, name='admin_home'),
+    path('admin/book_list/', BookList, name='book_list'),
+    path('admin/book_add/', BookAdd, name='book_add'),
+    path('admin/book_delete/',BookDelete,name='book_delete'),
+    path('admin/book_update',BookUpdate,name='book_update'),
+    path('admin/borrow_record', Record, name='borrow_record'),
+    path('user/home',UserHome, name='user_home'),
+    path('user/profile/', user_profile, name='user_profile'),
+    path('user/borrow_book/', borrow_book, name='borrow_book'),
+    path('user/return_book/', return_book, name='return_book'),
+
 ]
