@@ -3,25 +3,25 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
-from .models import Book,Profile
-from django.contrib.auth.forms import AuthenticationForm,User
+from .models import Book, Profile
+from django.contrib.auth.forms import AuthenticationForm, User
 from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import RegexValidator
 import datetime
 
+
 class BookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ['title', 'author', 'publisher','published_date','stock','isbn']
+        fields = ['title', 'author', 'publisher', 'published_date', 'stock', 'isbn']
         labels = {
             'title': '书名',
             'author': '作者',
             'publisher': '出版社',
             'published_date': '出版日期',
-            'stock':'数目',
-            'isbn' : 'ISBN',
+            'stock': '数目',
+            'isbn': 'ISBN',
         }
-
 
 
 class BookUpdateForm(forms.ModelForm):
@@ -36,10 +36,9 @@ class BookUpdateForm(forms.ModelForm):
             'author': '作者',
             'publisher': '出版社',
             'published_date': '出版日期',
-            'stock':'数目',
-            'isbn' : 'ISBN',
+            'stock': '数目',
+            'isbn': 'ISBN',
         }
-
 
 
 class BorrowBookForm(forms.Form):
@@ -56,16 +55,20 @@ class BorrowBookForm(forms.Form):
 
         return cleaned_data
 
+
 class ReturnBookForm(forms.Form):
     isbn = forms.CharField(label='ISBN号', max_length=13)
+
 
 class UserLoginForm(AuthenticationForm):
     username = forms.CharField(label='用户名', max_length=64)
     password = forms.CharField(label='密码', widget=forms.PasswordInput)
 
+
 class AdminLoginForm(AuthenticationForm):
     username = forms.CharField(label='用户名', max_length=64)
     password = forms.CharField(label='密码', widget=forms.PasswordInput)
+
 
 class CustomUserRegistrationForm(UserCreationForm):
     name = forms.CharField(label='姓名', max_length=100)

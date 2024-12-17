@@ -1,89 +1,166 @@
-header h1 {
-    font-size: 24px; /* 增大字体大小 */
-    font-weight: 600; /* 加粗字体 */
-    color: #fff; /* 设置字体颜色 */
-    margin: 0; /* 移除默认的外边距 */
-    padding: 20px 0; /* 添加内边距 */
-}
-body {
-    font-family: 'Open Sans', sans-serif;
+/* 全局样式 */
+body, html {
+    height: 100%;
     margin: 0;
     padding: 0;
-    background: #f4f4f4;
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f8f9fa; /* 背景色 */
+}
+
+body {
+    display: flex;
+    flex-direction: column;
     color: #333;
 }
 
+/* 导航栏样式 */
 .navbar {
-    background-color: #333;
+    background: linear-gradient(to right, #4CAF50, #2E8B57);
     color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.container {
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 20px; /* 保持内容不被屏幕边缘裁剪 */
-    max-width: 1200px; /* 设置最大宽度 */
+.navbar h1 {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .nav-links li {
-    display: inline;
-    margin-left: 20px;
+    margin-left: 15px;
 }
 
 .nav-links a {
     color: white;
     text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s ease;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .nav-links a:hover {
-    color: #ddd;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #FFFAFA;
 }
 
+.nav-links a::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: white;
+    transition: width 0.3s;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* 页面主体内容 */
+main.container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* 网格布局样式 */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    margin: 20px auto;
+}
+
+.grid-item {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.grid-item h3 {
+    margin-bottom: 15px;
+    color: #333;
+    border-bottom: 2px solid #4CAF50;
+    padding-bottom: 8px;
+}
+
+.grid-item ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.grid-item li {
+    margin-bottom: 15px;
+    color: #555;
+    font-size: 18px;
+}
+
+/* 表格样式 */
+.grid-item table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.grid-item th, .grid-item td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.grid-item th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+/* 用户个人资料 */
+.user-profile {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.user-profile p {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #555;
+}
+
+.user-profile p strong {
+    color: #333;
+    font-weight: bold;
+}
+
+/* 页脚样式 */
 .footer {
-    background-color: #333;
+    background: linear-gradient(to right, #2E8B57, #4CAF50);
     color: white;
     text-align: center;
     padding: 10px 0;
     width: 100%;
-    position: absolute;
+    position: relative;
     bottom: 0;
-    left: 0;
-}
-
-main {
-    padding: 20px;
-    background: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    margin-top: 20px;
-}
-
-.grid-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    padding: 20px;
-}
-
-.grid-item {
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.grid-item h3 {
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-}
-
-.text-overflow {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
 }
 
 /* 响应式设计 */

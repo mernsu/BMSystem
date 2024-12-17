@@ -1,14 +1,25 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>登录</title>
+    <link rel="stylesheet" href="{% static 'css/login_style.css' %}">
 </head>
 <body>
-<h2>登录</h2>
-<p>选择登录类型:</p>
-<a href="{% url 'user_login' %}">用户登录</a> |
-<a href="{% url 'admin_login' %}">管理员登录</a> |
-<a href="{% url 'user_register' %}">用户注册</a> |
-<a href="{% url 'admin_register' %}">管理员注册</a>
+    <div class="header-title">图书管理系统</div>
+    <div class="login-options">
+        <div class="card">
+            <a href="{% url 'user_login' %}">用户登录</a>
+        </div>
+        <div class="card">
+            <a href="{% url 'admin_login' %}">管理员登录</a>
+        </div>
+        <div class="card">
+            <a href="{% url 'user_register' %}">用户注册</a>
+        </div>
+        <div class="card">
+            <a href="{% url 'admin_register' %}">管理员注册</a>
+        </div>
+    </div>
 </body>
 </html>

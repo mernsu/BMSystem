@@ -1,19 +1,35 @@
 # views.py
 from django.contrib.auth.views import login_required
 from django.contrib import messages
-from .forms import BookForm,BookUpdateForm,AdminLoginForm
-from .models import Book,BorrowRecord
-from django.shortcuts import render, redirect,get_object_or_404
+from .forms import BookForm, BookUpdateForm, AdminLoginForm
+from .models import Book, BorrowRecord
+from django.shortcuts import render, redirect, get_object_or_404
 from datetime import date, timedelta
-from .forms import CustomUserRegistrationForm,UserLoginForm,BorrowBookForm,ReturnBookForm
-from django.contrib.auth import authenticate,login,logout
+from .forms import CustomUserRegistrationForm, UserLoginForm, BorrowBookForm, ReturnBookForm
+from django.contrib.auth import authenticate, login, logout
 from django.db.models import Count
 from django.utils import timezone
-from django.http import JsonResponse, HttpResponse,HttpResponseRedirect
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect, HttpResponseForbidden
+from functools import wraps
+
+
+def admin_required(view_func):
+    @wraps(view_func)
+    @login_required  # 确保用户已经登录
+    def _wrapped_view(request, *args, **kwargs):
+        # 检查用户是否有Profile实例，并且是否标记为管理员
+        if request.user.is_authenticated and request.user.profile.is_admin:
+            return view_func(request, *args, **kwargs)
+        else:
+            # 如果不是管理员，返回403禁止访问
+            return HttpResponseForbidden()
+
+    return _wrapped_view
 
 
 def combined_login(request):
     return render(request, 'BMSystem/combined_login.html')
+
 
 def user_register(request):
     if request.method == 'POST':
@@ -24,6 +40,7 @@ def user_register(request):
     else:
         form = CustomUserRegistrationForm()
     return render(request, 'BMSystem/user_register.html', {'form': form})
+
 
 def user_login(request):
     if request.method == 'POST':
@@ -41,6 +58,7 @@ def user_login(request):
         form = UserLoginForm()
     return render(request, 'BMSystem/user_login.html', {'form': form})
 
+
 def admin_register(request):
     if request.method == 'POST':
         form = CustomUserRegistrationForm(request.POST)
@@ -52,6 +70,8 @@ def admin_register(request):
     else:
         form = CustomUserRegistrationForm(initial={'is_admin': True})
     return render(request, 'BMSystem/admin_register.html', {'form': form})
+
+
 def admin_login(request):
     if request.method == 'POST':
         form = AdminLoginForm(data=request.POST)
@@ -72,6 +92,7 @@ def admin_login(request):
 def logout_view(request):
     logout(request)
     return redirect('combined_login')
+
 
 #图书借阅端<!---------------------------------------------------------------------------------------------------------
 
@@ -96,7 +117,6 @@ def user_profile(request):
     return render(request, 'BMSystem/user_profile.html', {'profile': profile})
 
 
-
 @login_required(login_url='user_login')
 def borrow_book(request):
     if request.method == 'POST':
@@ -106,7 +126,8 @@ def borrow_book(request):
             try:
                 book = Book.objects.get(isbn=isbn)
             except Book.DoesNotExist:
-                return JsonResponse({'status': 'error', 'error': '借阅失败！ISBN为“' + isbn + '”的书籍不存在'}, status=404)
+                return JsonResponse({'status': 'error', 'error': '借阅失败！ISBN为“' + isbn + '”的书籍不存在'},
+                                    status=404)
 
             if book.stock > 0:
                 due_date = form.cleaned_data.get('due_date', timezone.now().date())  # 如果未提供预计归还日期，则默认为当前日期
@@ -126,6 +147,7 @@ def borrow_book(request):
     else:
         form = BorrowBookForm()
         return render(request, 'BMSystem/borrow_book.html', {'form': form})
+
 
 @login_required(login_url='user_login')
 def return_book(request):
@@ -159,21 +181,23 @@ def return_book(request):
         form = ReturnBookForm()
         return render(request, 'BMSystem/return_book.html', {'form': form})
 
+
 #------------------------------------------------------------------------------------------------------------------!>
-
-
 
 
 #图书管理端<!--------------------------------------------------------------------------------------------------------
 
-@login_required(login_url='admin_login')
+
+@admin_required
 def AdminHome(request):
     popular_books = Book.objects.annotate(num_bookings=Count('borrow_count')).order_by('-num_bookings')[:5]
 
     # 每个月的借阅数据
     current_year = timezone.now().year
     current_month = timezone.now().month
-    bookings_this_month = BorrowRecord.objects.filter(borrow_date__year=current_year, borrow_date__month=current_month).values('borrow_date__month').annotate(total=Count('id')).order_by('borrow_date__month')
+    bookings_this_month = BorrowRecord.objects.filter(borrow_date__year=current_year,
+                                                      borrow_date__month=current_month).values(
+        'borrow_date__month').annotate(total=Count('id')).order_by('borrow_date__month')
 
     # 准备柱状图数据
     bar_chart_data = []
@@ -196,17 +220,20 @@ def AdminHome(request):
     }
     return render(request, 'BMSystem/admin_home.html', context)
 
-@login_required(login_url='admin_login')
+
+@admin_required
 def BookList(request):
     books = Book.objects.all()  # 获取所有书籍
     return render(request, 'BMSystem/book_list.html', {'books': books})
 
-@login_required(login_url='admin_login')
+
+@admin_required
 def book_detail(request, pk):
     book = get_object_or_404(Book, pk=pk)
     return render(request, 'BMSystem/book_detail.html', {'book': book})
 
-@login_required(login_url='admin_login')
+
+@admin_required
 def BookAdd(request):
     if request.method == 'POST':
         form = BookForm(request.POST)
@@ -217,8 +244,9 @@ def BookAdd(request):
             form = BookForm()
     return render(request, 'BMSystem/book_add.html', {'form': BookForm})
 
-@login_required(login_url='admin_login')
-def BookDelete (request):
+
+@admin_required
+def BookDelete(request):
     if request.method == 'POST':
         isbn = request.POST.get('isbn')
         if isbn:
@@ -235,7 +263,7 @@ def BookDelete (request):
         return render(request, 'BMSystem/book_delete.html')
 
 
-@login_required(login_url='admin_login')
+@admin_required
 def BookUpdate(request, pk):
     book = get_object_or_404(Book, pk=pk)
     if request.method == 'POST':
@@ -248,17 +276,9 @@ def BookUpdate(request, pk):
     return render(request, 'BMSystem/book_update.html', {'form': form})
 
 
-@login_required(login_url='admin_login')
+@admin_required
 def Record(request):
     records = BorrowRecord.objects.select_related('book', 'user').all()
     return render(request, 'BMSystem/borrow_record.html', {'borrow_record': records})
 
 #图书管理端--------------------------------------------------------------------------------------------------------!>
-
-
-
-
-
-
-
-
