@@ -3,7 +3,6 @@
 
 {% block content %}
     <div class="container">
-        <h1>图书馆首页</h1>
         <div class="popular-books">
             <h2>热门借阅书籍</h2>
             <ul>
@@ -15,8 +14,8 @@
             </ul>
         </div>
         <div class="bar-chart">
-            <h2>每月借阅柱状图</h2>
-            <canvas id="bookingChart"></canvas>
+            <h2>每月借阅</h2>
+            <canvas id="bookingChart"  width="800" height="400"></canvas>
         </div>
     </div>
 
@@ -27,22 +26,22 @@
         const bookingChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: {% for data in bar_chart_data %}"{{ data.month }}"{% if not forloop.last %},{% endif %}{% endfor %},
-            datasets: [{
-                label: '每月借阅次数',
-                data: {% for data in bar_chart_data %}{{ data.total }}{% if not forloop.last %},{% endif %}{% endfor %},
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-        }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
+                labels: [{% for data in bar_chart_data %}"{{ data.month }}"{% if not forloop.last %},{% endif %}{% endfor %}],
+                datasets: [{
+                    label: '每月借阅次数',
+                    data: [{% for data in bar_chart_data %}{{ data.total }}{% if not forloop.last %},{% endif %}{% endfor %}],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
         });
     </script>
 {% endblock %}

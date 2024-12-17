@@ -7,19 +7,38 @@
 {% block content %}
     <div class="container">
         <h2>图书列表</h2>
-        <ul>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>书名</th>
+                <th>作者</th>
+                <th>ISBN</th>
+                <th>出版社</th>
+                <th>出版日期</th>
+                <th>库存</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
             {% for book in books %}
-                <li>
-                    <strong>{{ book.title }}</strong> - {{ book.author }}
-                    <br><small>ISBN: {{ book.isbn }}</small>
-                    <br><small>出版社: {{ book.publisher }}</small>
-                    <br><small>出版日期: {{ book.published_date }}</small>
-                    <br><small>库存: {{ book.stock }}</small>
-                    <small><a href="{% url 'book_detail' pk=book.id %}">更多信息</a></small>
-                </li>
+                <tr>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.isbn }}</td>
+                    <td>{{ book.publisher }}</td>
+                    <td>{{ book.published_date }}</td>
+                    <td>{{ book.stock }}</td>
+                    <td>
+                        <a href="{% url 'book_detail' pk=book.id %}" class="btn btn-sm btn-primary">更多信息</a>
+                        <a href="{% url 'book_update' pk=book.id %}" class="btn btn-sm btn-secondary">修改</a>
+                    </td>
+                </tr>
             {% empty %}
-                <li>暂无图书信息。</li>
+                <tr>
+                    <td colspan="7" class="text-center">暂无图书信息。</td>
+                </tr>
             {% endfor %}
-        </ul>
+            </tbody>
+        </table>
     </div>
 {% endblock %}

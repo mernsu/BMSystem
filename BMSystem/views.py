@@ -9,7 +9,7 @@ from .forms import CustomUserRegistrationForm,UserLoginForm,BorrowBookForm,Retur
 from django.contrib.auth import authenticate,login,logout
 from django.db.models import Count
 from django.utils import timezone
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse,HttpResponseRedirect
 
 
 def combined_login(request):
@@ -234,26 +234,19 @@ def BookDelete (request):
         # 如果不是POST请求，显示删除页面
         return render(request, 'BMSystem/book_delete.html')
 
+
 @login_required(login_url='admin_login')
-def BookUpdate(request):
+def BookUpdate(request, pk):
+    book = get_object_or_404(Book, pk=pk)
     if request.method == 'POST':
-        form = BookUpdateForm(request.POST)
+        form = BookForm(request.POST, instance=book)
         if form.is_valid():
-            book = form.save(commit=False)
-            book.save()
-            messages.success(request, "The book has been updated successfully.")
-            return redirect('book_list')  # 重定向到图书列表页面
+            form.save()
+            return redirect('book_list')
     else:
-        books = Book.objects.all()
-        form = BookUpdateForm(initial={'isbn': '', 'title': '', 'author': '', 'publisher': '', 'published_date': '', 'stock': ''})
-        for book in books:
-            form.fields['isbn'].initial = book.isbn
-            form.fields['title'].initial = book.title
-            form.fields['author'].initial = book.author
-            form.fields['publisher'].initial = book.publisher
-            form.fields['published_date'].initial = book.published_date
-            form.fields['stock'].initial = book.stock
+        form = BookForm(instance=book)
     return render(request, 'BMSystem/book_update.html', {'form': form})
+
 
 @login_required(login_url='admin_login')
 def Record(request):

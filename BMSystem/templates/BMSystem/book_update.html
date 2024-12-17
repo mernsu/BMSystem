@@ -1,49 +1,17 @@
-<!-- update_book.html -->
+<!-- BMSystem/templates/BMSystem/book_update.html -->
+
 {% extends 'BMSystem/base.html' %}
 
-{% load static %}
-
-{% block title %}更新图书信息{% endblock %}
+{% block title %}更新图书 - 图书馆管理系统{% endblock %}
 
 {% block content %}
-    <div class="update-book-container">
-        <header>
-            <h1>更新图书信息</h1>
-        </header>
-
-        <section>
-            <form method="post" action="{% url 'book_update' %}">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">更新图书</button>
-            </form>
-            {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        </section>
+    <div class="container">
+        <h2>更新图书信息</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">更新</button>
+            <a href="{% url 'book_list' %}" class="btn btn-secondary">取消</a>
+        </form>
     </div>
-{% endblock %}
-
-{% block extra_css %}
-    <style>
-        .update-book-container {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        form button {
-            margin-top: 10px;
-        }
-    </style>
 {% endblock %}
