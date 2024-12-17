@@ -1,14 +1,22 @@
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>管理员登录</title>
 </head>
 <body>
-<h2>管理员登录</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">登录</button>
-</form>
+<div class="container">
+    <h2>管理员登录</h2>
+    <form method="post" class="form-group">
+        {% csrf_token %}
+        <label for="username">用户名:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">密码:</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="submit" class="btn">登录</button>
+    </form>
+</div>
 </body>
 </html>
