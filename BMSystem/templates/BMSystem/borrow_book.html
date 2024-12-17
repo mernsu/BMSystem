@@ -6,7 +6,7 @@
 
 {% block content %}
     <div class="container">
-        <h2>借阅图书</h2>
+        <h2 class="page-title">借阅图书</h2>
         <form id="borrowForm" method="post" action="{% url 'borrow_book' %}">
             {% csrf_token %}
             <div class="form-group">

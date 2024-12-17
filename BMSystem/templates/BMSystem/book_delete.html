@@ -1,5 +1,4 @@
-<!-- delete_book.html -->
-{% extends 'BMSystem/base.html' %}
+<{% extends 'BMSystem/base.html' %}
 
 {% block title %}图书出库{% endblock %}
 
@@ -8,6 +7,7 @@
         <header>
             <h1>图书出库</h1>
         </header>
+
         {% if messages %}
             <ul class="messages">
                 {% for message in messages %}
@@ -15,12 +15,17 @@
                 {% endfor %}
             </ul>
         {% endif %}
-        <section>
-            <form method="post">
+
+        <section class="form-section">
+            <form method="post" class="delete-form">
                 {% csrf_token %}
-                <label for="isbn">输入 ISBN:</label>
-                <input type="text" id="isbn" name="isbn" required>
-                <button type="submit">确认</button>
+                <div class="form-group">
+                    <label for="isbn">输入 ISBN:</label>
+                    <input type="text" id="isbn" name="isbn" placeholder="请输入 ISBN" required>
+                </div>
+                <div class="button-container">
+                    <button type="submit" class="btn">确认</button>
+                </div>
             </form>
         </section>
     </div>

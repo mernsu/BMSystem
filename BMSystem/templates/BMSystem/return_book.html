@@ -6,34 +6,14 @@
 
 {% block content %}
     <div class="container">
-        <h2>归还书籍</h2>
+        <h2 class="page-title">归还书籍</h2> <!-- 标题放在表单上方 -->
         <form id="returnForm" method="post" action="{% url 'return_book' %}">
             {% csrf_token %}
             <div class="form-group">
                 <label for="isbn">ISBN号:</label>
-                <input type="text" class="form-control" id="isbn" name="isbn" required>
+                <input type="text" class="form-control" id="isbn" name="isbn" placeholder="请输入ISBN号" required>
             </div>
             <button type="submit" class="btn btn-primary">归还</button>
         </form>
-        <div id="message"></div>
     </div>
-    <script>
-        document.getElementById('returnForm').onsubmit = function(e) {
-            e.preventDefault(); // 阻止表单默认提交行为
-            var formData = new FormData(this);
-            fetch("{% url 'return_book' %}", {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if(data.status === 'success') {
-                        alert(data.message); // 显示成功消息
-                    } else {
-                        alert(data.error); // 显示错误消息
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        };
-    </script>
 {% endblock %}

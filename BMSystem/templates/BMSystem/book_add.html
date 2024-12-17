@@ -3,10 +3,37 @@
 {% block title %}图书入库{% endblock %}
 
 {% block content %}
-    <h2>图书入库</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">入库</button>
-    </form>
+    <div class="form-container">
+        <h2>图书入库</h2>
+        <form method="post" class="optimized-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_name">书名:</label>
+                <input type="text" id="id_name" name="name">
+            </div>
+            <div class="form-group">
+                <label for="id_author">作者:</label>
+                <input type="text" id="id_author" name="author">
+            </div>
+            <div class="form-group">
+                <label for="id_publisher">出版社:</label>
+                <input type="text" id="id_publisher" name="publisher">
+            </div>
+            <div class="form-group">
+                <label for="id_date">出版日期:</label>
+                <input type="date" id="id_date" name="date" value="2024-12-17">
+            </div>
+            <div class="form-group">
+                <label for="id_quantity">数目:</label>
+                <input type="number" id="id_quantity" name="quantity" value="0">
+            </div>
+            <div class="form-group">
+                <label for="id_isbn">ISBN:</label>
+                <input type="text" id="id_isbn" name="isbn">
+            </div>
+            <div class="button-container">
+                <button type="submit" class="btn">入库</button>
+            </div>
+        </form>
+    </div>
 {% endblock %}
