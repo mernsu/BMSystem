@@ -9,10 +9,21 @@ from .forms import CustomUserRegistrationForm, UserLoginForm, BorrowBookForm, Re
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Count
 from django.utils import timezone
+<<<<<<< HEAD
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from functools import wraps
 
 
+=======
+from django.http import JsonResponse, HttpResponse,HttpResponseRedirect,HttpResponseForbidden
+from functools import wraps
+
+
+
+
+
+
+>>>>>>> 8ccf56837753743090847d0bf0f4c015ed923be0
 def admin_required(view_func):
     @wraps(view_func)
     @login_required  # 确保用户已经登录
@@ -23,7 +34,10 @@ def admin_required(view_func):
         else:
             # 如果不是管理员，返回403禁止访问
             return HttpResponseForbidden()
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8ccf56837753743090847d0bf0f4c015ed923be0
     return _wrapped_view
 
 
@@ -246,7 +260,11 @@ def BookAdd(request):
 
 
 @admin_required
+<<<<<<< HEAD
 def BookDelete(request):
+=======
+def BookDelete (request):
+>>>>>>> 8ccf56837753743090847d0bf0f4c015ed923be0
     if request.method == 'POST':
         isbn = request.POST.get('isbn')
         if isbn:
@@ -263,6 +281,10 @@ def BookDelete(request):
         return render(request, 'BMSystem/book_delete.html')
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8ccf56837753743090847d0bf0f4c015ed923be0
 @admin_required
 def BookUpdate(request, pk):
     book = get_object_or_404(Book, pk=pk)
@@ -276,6 +298,10 @@ def BookUpdate(request, pk):
     return render(request, 'BMSystem/book_update.html', {'form': form})
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8ccf56837753743090847d0bf0f4c015ed923be0
 @admin_required
 def Record(request):
     records = BorrowRecord.objects.select_related('book', 'user').all()

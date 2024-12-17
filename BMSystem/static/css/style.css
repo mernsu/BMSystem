@@ -191,6 +191,7 @@ body {
     text-align: center;
 }
 
+<<<<<<< HEAD
 /* 放大出库页面表单两倍 */
 .form-section {
     background-color: rgba(255, 255, 255, 0.9);
@@ -209,9 +210,61 @@ body {
     padding: 20px 50px; /* 增大按钮尺寸 */
     font-size: 24px; /* 字体大小加倍 */
     background-color: #5cb85c;
+=======
+.form-section {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 400px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.form-group input {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #5cb85c;
+    box-shadow: 0 0 5px rgba(92, 184, 92, 0.5);
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+}
+
+.btn {
+    background-color: #5cb85c;
+    color: white;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+>>>>>>> 8ccf56837753743090847d0bf0f4c015ed923be0
 }
 
 .btn:hover {
     background-color: #4cae4c;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8ccf56837753743090847d0bf0f4c015ed923be0

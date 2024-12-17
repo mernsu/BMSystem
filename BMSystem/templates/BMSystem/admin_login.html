@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 {% load static %}
+=======
+
+>>>>>>> 8ccf56837753743090847d0bf0f4c015ed923be0
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,6 +10,7 @@
     <link rel="stylesheet" href="{% static 'css/login_style.css' %}">
 </head>
 <body>
+<<<<<<< HEAD
 <div class="header-title">图书管理系统</div>
 <div class="header-line"></div>
 <div class="container">
@@ -23,6 +28,20 @@
         <button type="submit">登录</button>
     </form>
     <p>还没有账号？<a href="{% url 'admin_register' %}">管理员注册</a></p>
+=======
+<div class="container">
+    <h2>管理员登录</h2>
+    <form method="post" class="form-group">
+        {% csrf_token %}
+        <label for="username">用户名:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">密码:</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="submit" class="btn">登录</button>
+    </form>
+>>>>>>> 8ccf56837753743090847d0bf0f4c015ed923be0
 </div>
 </body>
 </html>
